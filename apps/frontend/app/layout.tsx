@@ -7,7 +7,13 @@ export const metadata: Metadata = {
     template: "%s | IT Blog",
   },
   description: "IT news and articles about programming, AI, DevOps and modern web.",
-  metadataBase: new URL("http://localhost:3000"), // потім зміниш на production домен
+
+  // ВАЖЛИВО: постав прод-домен фронтенду
+  metadataBase: new URL("https://romantic-nourishment-production-b446.up.railway.app"),
+
+  verification: {
+    google: "nluEGY-kniGdCZe1XPwb2R8elw2dFTI0267L0bSX42U",
+  },
 
   openGraph: {
     title: "IT Blog",
@@ -30,10 +36,7 @@ export default function RootLayout({
     <html lang="en">
       <body style={{ margin: 0, fontFamily: "system-ui, Arial, sans-serif" }}>
         <Header />
-
-        <div style={{ minHeight: "100vh" }}>
-          {children}
-        </div>
+        <div style={{ minHeight: "100vh" }}>{children}</div>
       </body>
     </html>
   );
