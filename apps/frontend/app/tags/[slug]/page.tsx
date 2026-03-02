@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { formatDate } from "../../lib/format-date";
 
 type Article = {
   id: number;
@@ -35,18 +36,11 @@ export default async function TagPage({
 
   return (
     <main style={{ maxWidth: 900, margin: "0 auto", padding: 24 }}>
-      
-      {/* 🔹 ДОДАЛИ КНОПКУ НАЗАД */}
-      <Link
-        href="/tags"
-        style={{ display: "inline-block", marginBottom: 12 }}
-      >
-         All tags
+      <Link href="/tags" style={{ display: "inline-block", marginBottom: 12 }}>
+        All tags
       </Link>
 
-      <h1 style={{ fontSize: 28, marginBottom: 16 }}>
-        Tag: {slug}
-      </h1>
+      <h1 style={{ fontSize: 28, marginBottom: 16 }}>Tag: {slug}</h1>
 
       <ul style={{ listStyle: "none", padding: 0, display: "grid", gap: 12 }}>
         {items.map((a) => (
@@ -54,26 +48,17 @@ export default async function TagPage({
             key={a.id}
             style={{ border: "1px solid #ddd", borderRadius: 12, padding: 14 }}
           >
-            <Link
-              href={`/articles/${a.slug}`}
-              style={{ fontSize: 18, fontWeight: 700 }}
-            >
+            <Link href={`/articles/${a.slug}`} style={{ fontSize: 18, fontWeight: 700 }}>
               {a.title}
             </Link>
 
             <p style={{ margin: "8px 0" }}>{a.excerpt}</p>
 
             <small style={{ opacity: 0.8 }}>
-              <Link href={`/categories/${a.category_slug}`}>
-                {a.category_name}
-              </Link>{" "}
-              •{" "}
-              <Link href={`/authors/${a.author_slug}`}>
-                {a.author_name}
-              </Link>
-              {a.published_at
-                ? ` • ${new Date(a.published_at).toLocaleDateString()}`
-                : ""}
+              <Link href={`/categories/${a.category_slug}`}>{a.category_name}</Link>
+              {" | "}
+              <Link href={`/authors/${a.author_slug}`}>{a.author_name}</Link>
+              {a.published_at ? ` | ${formatDate(a.published_at)}` : ""}
             </small>
           </li>
         ))}

@@ -15,6 +15,7 @@ export default function Header() {
           <a href="/categories/react">Categories</a>
           <a href="/tags/nextjs">Tags</a>
           <a href="/authors/john-doe">Authors</a>
+          <a href="/admin">Admin</a>
         </nav>
 
         <div style={{ marginLeft: "auto", display: "flex", gap: 8 }}>

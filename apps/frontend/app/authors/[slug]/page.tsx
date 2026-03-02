@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { formatDate } from "../../lib/format-date";
 
 type Author = {
   id: number;
@@ -18,7 +19,6 @@ type Article = {
   published_at: string | null;
 };
 
-// ✅ params as Promise
 export default async function AuthorPage({
   params,
 }: {
@@ -49,19 +49,12 @@ export default async function AuthorPage({
 
   return (
     <main style={{ maxWidth: 900, margin: "0 auto", padding: 24 }}>
-      
-      {/* 🔹 КНОПКА НАЗАД */}
-      <Link
-        href="/authors"
-        style={{ display: "inline-block", marginBottom: 12 }}
-      >
-         All authors
+      <Link href="/authors" style={{ display: "inline-block", marginBottom: 12 }}>
+        All authors
       </Link>
 
       <h1 style={{ fontSize: 32, marginBottom: 6 }}>{author.name}</h1>
-      <p style={{ opacity: 0.8, marginTop: 0 }}>
-        {author.bio || "No bio yet."}
-      </p>
+      <p style={{ opacity: 0.8, marginTop: 0 }}>{author.bio || "No bio yet."}</p>
 
       <h2 style={{ marginTop: 24 }}>Articles</h2>
 
@@ -71,22 +64,15 @@ export default async function AuthorPage({
             key={a.id}
             style={{ border: "1px solid #ddd", borderRadius: 12, padding: 14 }}
           >
-            <Link
-              href={`/articles/${a.slug}`}
-              style={{ fontSize: 18, fontWeight: 700 }}
-            >
+            <Link href={`/articles/${a.slug}`} style={{ fontSize: 18, fontWeight: 700 }}>
               {a.title}
             </Link>
 
             <p style={{ margin: "8px 0" }}>{a.excerpt}</p>
 
             <small style={{ opacity: 0.8 }}>
-              <Link href={`/categories/${a.category_slug}`}>
-                {a.category_name}
-              </Link>
-              {a.published_at
-                ? ` • ${new Date(a.published_at).toLocaleDateString()}`
-                : ""}
+              <Link href={`/categories/${a.category_slug}`}>{a.category_name}</Link>
+              {a.published_at ? ` | ${formatDate(a.published_at)}` : ""}
             </small>
           </li>
         ))}

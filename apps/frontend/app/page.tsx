@@ -1,3 +1,5 @@
+import { formatDate } from "./lib/format-date";
+
 type Article = {
   id: number;
   title: string;
@@ -31,7 +33,7 @@ export default async function Home() {
             <p style={{ marginTop: 8 }}>{a.excerpt}</p>
             <small style={{ opacity: 0.8 }}>
               {a.category_name} • {a.author_name} •{" "}
-              {a.published_at ? new Date(a.published_at).toLocaleDateString() : ""}
+              {formatDate(a.published_at)}
             </small>
           </li>
         ))}

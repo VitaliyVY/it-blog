@@ -1,3 +1,5 @@
+import { formatDate } from "../../lib/format-date";
+
 type Article = {
   id: number;
   title: string;
@@ -31,18 +33,11 @@ export default async function CategoryPage({
 
   return (
     <main style={{ maxWidth: 900, margin: "0 auto", padding: 24 }}>
-      
-      {/* 🔹 ОЦЕ МИ ДОДАЛИ */}
-      <a
-        href="/categories"
-        style={{ display: "inline-block", marginBottom: 12 }}
-      >
-         All categories
+      <a href="/categories" style={{ display: "inline-block", marginBottom: 12 }}>
+        All categories
       </a>
 
-      <h1 style={{ fontSize: 28, marginBottom: 16 }}>
-        Category: {slug}
-      </h1>
+      <h1 style={{ fontSize: 28, marginBottom: 16 }}>Category: {slug}</h1>
 
       <ul style={{ listStyle: "none", padding: 0, display: "grid", gap: 12 }}>
         {items.map((a) => (
@@ -50,21 +45,13 @@ export default async function CategoryPage({
             key={a.id}
             style={{ border: "1px solid #ddd", borderRadius: 12, padding: 14 }}
           >
-            <a
-              href={`/articles/${a.slug}`}
-              style={{ fontSize: 18, fontWeight: 700 }}
-            >
+            <a href={`/articles/${a.slug}`} style={{ fontSize: 18, fontWeight: 700 }}>
               {a.title}
             </a>
             <p style={{ margin: "8px 0" }}>{a.excerpt}</p>
             <small style={{ opacity: 0.8 }}>
-              by{" "}
-              <a href={`/authors/${a.author_slug}`}>
-                {a.author_name}
-              </a>{" "}
-              {a.published_at
-                ? `• ${new Date(a.published_at).toLocaleDateString()}`
-                : ""}
+              by <a href={`/authors/${a.author_slug}`}>{a.author_name}</a>
+              {a.published_at ? ` | ${formatDate(a.published_at)}` : ""}
             </small>
           </li>
         ))}
