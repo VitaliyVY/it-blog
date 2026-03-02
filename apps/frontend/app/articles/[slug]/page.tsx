@@ -1,3 +1,4 @@
+import ViewCounter from "./ViewCounter";
 import { formatDate } from "../../lib/format-date";
 
 type Tag = { name: string; slug: string };
@@ -8,6 +9,7 @@ type Article = {
   slug: string;
   content: string;
   excerpt: string | null;
+  views: number;
   published_at: string | null;
   category_name: string;
   category_slug: string;
@@ -46,6 +48,7 @@ export default async function ArticlePage({
 
   const json = await res.json();
   const a: Article = json.data;
+
   const relatedRes = await fetch(`${api}/categories/${a.category_slug}/articles`, {
     cache: "no-store",
   });
@@ -57,15 +60,19 @@ export default async function ArticlePage({
   return (
     <main style={{ maxWidth: 900, margin: "0 auto", padding: 24 }}>
       <a href="/" style={{ display: "inline-block", marginBottom: 12 }}>
-         Back
+        Back
       </a>
 
       <h1 style={{ fontSize: 34, marginBottom: 8 }}>{a.title}</h1>
       <div style={{ opacity: 0.8, marginBottom: 16 }}>
-        <a href={`/categories/${a.category_slug}`}>{a.category_name}</a> •{" "}
-        <a href={`/authors/${a.author_slug}`}>{a.author_name}</a> •{" "}
+        <a href={`/categories/${a.category_slug}`}>{a.category_name}</a>
+        {" | "}
+        <a href={`/authors/${a.author_slug}`}>{a.author_name}</a>
+        {" | "}
         {formatDate(a.published_at)}
       </div>
+
+      <ViewCounter slug={a.slug} initialViews={a.views} />
 
       {a.tags?.length ? (
         <div style={{ marginBottom: 16 }}>
@@ -107,7 +114,8 @@ export default async function ArticlePage({
                 </a>
                 {item.excerpt ? <p style={{ marginTop: 8 }}>{item.excerpt}</p> : null}
                 <small style={{ opacity: 0.8 }}>
-                  <a href={`/authors/${item.author_slug}`}>{item.author_name}</a> {" | "}
+                  <a href={`/authors/${item.author_slug}`}>{item.author_name}</a>
+                  {" | "}
                   {formatDate(item.published_at)}
                 </small>
               </li>

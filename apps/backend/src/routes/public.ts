@@ -58,6 +58,7 @@ export default async function publicRoutes(app: FastifyInstance) {
     const article = rows[0];
     if (!article) return reply.code(404).send({ error: "Not found" });
 
+
     // теги
     const tags = await query(
       `
@@ -71,6 +72,26 @@ export default async function publicRoutes(app: FastifyInstance) {
     );
 
     return ok({ ...article, tags }, {});
+  });
+
+  // POST /api/articles/:slug/view
+  app.post("/articles/:slug/view", async (req: any, reply) => {
+    const slug = String(req.params.slug);
+
+    const rows = await query<{ views: number }>(
+      `
+      UPDATE articles
+      SET views = views + 1
+      WHERE slug = $1 AND status = 'published'
+      RETURNING views
+      `,
+      [slug]
+    );
+
+    const article = rows[0];
+    if (!article) return reply.code(404).send({ error: "Not found" });
+
+    return ok({ views: Number(article.views || 0) }, {});
   });
 
   // GET /api/categories
