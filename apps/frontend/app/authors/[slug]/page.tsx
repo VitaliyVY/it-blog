@@ -53,22 +53,76 @@ export default async function AuthorPage({
         All authors
       </Link>
 
-      <h1 style={{ fontSize: 32, marginBottom: 6 }}>{author.name}</h1>
-      <p style={{ opacity: 0.8, marginTop: 0 }}>{author.bio || "No bio yet."}</p>
+      <section
+        style={{
+          display: "grid",
+          gridTemplateColumns: "120px 1fr",
+          gap: 20,
+          alignItems: "start",
+          marginBottom: 28,
+          padding: 20,
+          border: "1px solid #ddd",
+          borderRadius: 16,
+        }}
+      >
+        {author.avatar_url ? (
+          <img
+            src={author.avatar_url}
+            alt={author.name}
+            width={120}
+            height={120}
+            style={{
+              width: 120,
+              height: 120,
+              objectFit: "cover",
+              borderRadius: 16,
+              display: "block",
+            }}
+          />
+        ) : (
+          <div
+            style={{
+              width: 120,
+              height: 120,
+              borderRadius: 16,
+              background: "#f3f4f6",
+              display: "grid",
+              placeItems: "center",
+              fontSize: 40,
+              fontWeight: 700,
+              color: "#6b7280",
+            }}
+          >
+            {author.name.charAt(0).toUpperCase()}
+          </div>
+        )}
+
+        <div>
+          <h1 style={{ fontSize: 32, margin: "0 0 8px" }}>{author.name}</h1>
+          <p style={{ opacity: 0.8, margin: "0 0 8px" }}>@{author.slug}</p>
+          <p style={{ margin: 0, lineHeight: 1.6 }}>
+            {author.bio || "No bio yet."}
+          </p>
+        </div>
+      </section>
 
       <h2 style={{ marginTop: 24 }}>Articles</h2>
+
+      {!items.length ? (
+        <p style={{ opacity: 0.8 }}>This author has no published articles yet.</p>
+      ) : null}
 
       <ul style={{ listStyle: "none", padding: 0, display: "grid", gap: 12 }}>
         {items.map((a) => (
           <li
             key={a.id}
-            style={{ border: "1px solid #ddd", borderRadius: 12, padding: 14 }}
+            style={{ border: "1px solid #ddd", borderRadius: 12, padding: 16 }}
           >
             <Link href={`/articles/${a.slug}`} style={{ fontSize: 18, fontWeight: 700 }}>
               {a.title}
             </Link>
 
-            <p style={{ margin: "8px 0" }}>{a.excerpt}</p>
+            {a.excerpt ? <p style={{ margin: "8px 0" }}>{a.excerpt}</p> : null}
 
             <small style={{ opacity: 0.8 }}>
               <Link href={`/categories/${a.category_slug}`}>{a.category_name}</Link>
