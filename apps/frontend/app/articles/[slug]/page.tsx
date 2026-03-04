@@ -9,6 +9,7 @@ type Article = {
   slug: string;
   content: string;
   excerpt: string | null;
+  cover_url: string | null;
   views: number;
   published_at: string | null;
   category_name: string;
@@ -23,6 +24,7 @@ type RelatedArticle = {
   title: string;
   slug: string;
   excerpt: string | null;
+  cover_url: string | null;
   published_at: string | null;
   author_name: string;
   author_slug: string;
@@ -74,6 +76,21 @@ export default async function ArticlePage({
 
       <ViewCounter slug={a.slug} initialViews={a.views} />
 
+      {a.cover_url ? (
+        <img
+          src={a.cover_url}
+          alt={a.title}
+          style={{
+            width: "100%",
+            maxHeight: 460,
+            objectFit: "cover",
+            borderRadius: 14,
+            marginBottom: 20,
+            display: "block",
+          }}
+        />
+      ) : null}
+
       {a.tags?.length ? (
         <div style={{ marginBottom: 16 }}>
           {a.tags.map((t) => (
@@ -109,6 +126,20 @@ export default async function ArticlePage({
                 key={item.id}
                 style={{ border: "1px solid #ddd", borderRadius: 12, padding: 16 }}
               >
+                {item.cover_url ? (
+                  <img
+                    src={item.cover_url}
+                    alt={item.title}
+                    style={{
+                      width: "100%",
+                      height: 180,
+                      objectFit: "cover",
+                      borderRadius: 10,
+                      marginBottom: 12,
+                      display: "block",
+                    }}
+                  />
+                ) : null}
                 <a href={`/articles/${item.slug}`} style={{ fontSize: 18, fontWeight: 700 }}>
                   {item.title}
                 </a>

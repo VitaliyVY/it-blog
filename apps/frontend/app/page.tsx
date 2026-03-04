@@ -27,6 +27,20 @@ export default async function Home() {
       <ul style={{ listStyle: "none", padding: 0, display: "grid", gap: 16 }}>
         {articles.map((a) => (
           <li key={a.id} style={{ border: "1px solid #ddd", borderRadius: 12, padding: 16 }}>
+            {a.cover_url ? (
+              <img
+                src={a.cover_url}
+                alt={a.title}
+                style={{
+                  width: "100%",
+                  height: 220,
+                  objectFit: "cover",
+                  borderRadius: 10,
+                  marginBottom: 12,
+                  display: "block",
+                }}
+              />
+            ) : null}
             <a href={`/articles/${a.slug}`} style={{ fontSize: 20, fontWeight: 700 }}>
               {a.title}
             </a>

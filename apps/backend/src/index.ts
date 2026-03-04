@@ -12,6 +12,8 @@ async function main() {
   await app.register(cors, {
     origin: process.env.CORS_ORIGIN || true,
     credentials: true,
+    methods: ["GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   });
 
   await app.register(jwt, {
