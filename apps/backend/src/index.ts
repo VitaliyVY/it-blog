@@ -3,10 +3,21 @@ import Fastify from "fastify";
 import cors from "@fastify/cors";
 import jwt from "@fastify/jwt";
 
+import { query } from "./db";
 import publicRoutes from "./routes/public";
 import adminRoutes from "./routes/admin";
 
-const app = Fastify({ logger: true });
+const app = Fastify({
+  logger: true,
+  // Article cover images are currently stored as data URLs in JSON payloads.
+  // Increase limit to avoid abrupt connection drops on larger uploads.
+  bodyLimit: 10 * 1024 * 1024,
+});
+
+async function ensureMediaColumnsAreText() {
+  await query(`ALTER TABLE articles ALTER COLUMN cover_url TYPE TEXT`);
+  await query(`ALTER TABLE users ALTER COLUMN avatar_url TYPE TEXT`);
+}
 
 async function main() {
   await app.register(cors, {
@@ -19,6 +30,12 @@ async function main() {
   await app.register(jwt, {
     secret: process.env.JWT_SECRET || "change-me",
   });
+
+  try {
+    await ensureMediaColumnsAreText();
+  } catch (error) {
+    app.log.warn({ error }, "Could not auto-migrate image URL columns to TEXT");
+  }
 
   // healthcheck
   app.get("/health", async () => ({ ok: true }));

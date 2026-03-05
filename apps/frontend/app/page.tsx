@@ -1,4 +1,5 @@
 import { formatDate } from "./lib/format-date";
+import { resolveMediaUrl } from "./lib/media-url";
 
 type Article = {
   id: number;
@@ -27,9 +28,9 @@ export default async function Home() {
       <ul style={{ listStyle: "none", padding: 0, display: "grid", gap: 16 }}>
         {articles.map((a) => (
           <li key={a.id} style={{ border: "1px solid #ddd", borderRadius: 12, padding: 16 }}>
-            {a.cover_url ? (
+            {resolveMediaUrl(a.cover_url) ? (
               <img
-                src={a.cover_url}
+                src={resolveMediaUrl(a.cover_url)}
                 alt={a.title}
                 style={{
                   width: "100%",

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { resolveMediaUrl } from "../../../lib/media-url";
 import {
   adminRequest,
   apiRequest,
@@ -57,6 +58,8 @@ const EMPTY_FORM: ArticleForm = {
   author_id: "",
   published_at: "",
 };
+
+const MAX_IMAGE_FILE_SIZE_BYTES = 5 * 1024 * 1024;
 
 function toDateTimeInput(value: string | null) {
   if (!value) return "";
@@ -159,12 +162,23 @@ export default function ArticleEditorClient({ id }: { id: string }) {
   function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     if (!file) return;
+    setError("");
+    setNotice("");
+
+    if (file.size > MAX_IMAGE_FILE_SIZE_BYTES) {
+      setError("Image is too large. Select a file up to 5 MB.");
+      event.target.value = "";
+      return;
+    }
 
     const reader = new FileReader();
     reader.onload = () => {
       const result = typeof reader.result === "string" ? reader.result : "";
       setForm((current) => ({ ...current, cover_url: result }));
       setNotice("Image loaded into cover_url as a data URL.");
+    };
+    reader.onerror = () => {
+      setError("Could not read selected image.");
     };
     reader.readAsDataURL(file);
   }
@@ -199,7 +213,13 @@ export default function ArticleEditorClient({ id }: { id: string }) {
       await parseResponse<ArticleRecord>(res);
       router.push("/admin/articles");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Save failed");
+      if (err instanceof Error && err.message === "Failed to fetch") {
+        setError(
+          "Network error while saving. Check backend availability/CORS or try a smaller image."
+        );
+      } else {
+        setError(err instanceof Error ? err.message : "Save failed");
+      }
     } finally {
       setSaving(false);
     }
@@ -312,9 +332,9 @@ export default function ArticleEditorClient({ id }: { id: string }) {
             <input type="file" accept="image/*" onChange={handleFileChange} />
           </label>
 
-          {form.cover_url ? (
+          {resolveMediaUrl(form.cover_url) ? (
             <img
-              src={form.cover_url}
+              src={resolveMediaUrl(form.cover_url)}
               alt="Cover preview"
               style={{
                 width: "100%",

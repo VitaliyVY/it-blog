@@ -33,7 +33,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body style={{ margin: 0, fontFamily: "system-ui, Arial, sans-serif" }}>
         <Header />
         <div style={{ minHeight: "100vh" }}>{children}</div>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { resolveMediaUrl } from "../lib/media-url";
 
 type Author = {
   id: number;
@@ -42,9 +43,9 @@ export default async function AuthorsPage() {
               alignItems: "start",
             }}
           >
-            {a.avatar_url ? (
+            {resolveMediaUrl(a.avatar_url) ? (
               <img
-                src={a.avatar_url}
+                src={resolveMediaUrl(a.avatar_url)}
                 alt={a.name}
                 width={72}
                 height={72}

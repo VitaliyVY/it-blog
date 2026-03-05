@@ -7,7 +7,7 @@ CREATE TABLE users
     email      VARCHAR(150) NOT NULL UNIQUE,
     password   VARCHAR(255) NOT NULL,
     bio        TEXT,
-    avatar_url VARCHAR(500),
+    avatar_url TEXT,
     is_admin   BOOLEAN   DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT NOW()
 );
@@ -30,7 +30,7 @@ CREATE TABLE articles
     slug             VARCHAR(300) NOT NULL UNIQUE,
     excerpt          TEXT,                        -- короткий опис для анонсу
     content          TEXT         NOT NULL,
-    cover_url        VARCHAR(500),
+    cover_url        TEXT,
     author_id        INTEGER REFERENCES users (id),
     category_id      INTEGER REFERENCES categories (id),
     status           VARCHAR(20) DEFAULT 'draft', -- draft | published

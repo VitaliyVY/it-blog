@@ -1,5 +1,6 @@
 import ViewCounter from "./ViewCounter";
 import { formatDate } from "../../lib/format-date";
+import { resolveMediaUrl } from "../../lib/media-url";
 
 type Tag = { name: string; slug: string };
 
@@ -76,14 +77,15 @@ export default async function ArticlePage({
 
       <ViewCounter slug={a.slug} initialViews={a.views} />
 
-      {a.cover_url ? (
+      {resolveMediaUrl(a.cover_url) ? (
         <img
-          src={a.cover_url}
+          src={resolveMediaUrl(a.cover_url)}
           alt={a.title}
           style={{
             width: "100%",
             maxHeight: 460,
-            objectFit: "cover",
+            objectFit: "contain",
+            background: "#f8fafc",
             borderRadius: 14,
             marginBottom: 20,
             display: "block",
@@ -126,14 +128,15 @@ export default async function ArticlePage({
                 key={item.id}
                 style={{ border: "1px solid #ddd", borderRadius: 12, padding: 16 }}
               >
-                {item.cover_url ? (
+                {resolveMediaUrl(item.cover_url) ? (
                   <img
-                    src={item.cover_url}
+                    src={resolveMediaUrl(item.cover_url)}
                     alt={item.title}
                     style={{
                       width: "100%",
                       height: 180,
-                      objectFit: "cover",
+                      objectFit: "contain",
+                      background: "#f8fafc",
                       borderRadius: 10,
                       marginBottom: 12,
                       display: "block",

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
+import { resolveMediaUrl } from "../../lib/media-url";
 import {
   adminRequest,
   clearAdminToken,
@@ -275,9 +276,9 @@ export default function AdminAuthorsPage() {
               />
             </label>
 
-            {form.avatar_url ? (
+            {resolveMediaUrl(form.avatar_url) ? (
               <img
-                src={form.avatar_url}
+                src={resolveMediaUrl(form.avatar_url)}
                 alt="Author preview"
                 style={{
                   width: 120,
@@ -340,9 +341,9 @@ export default function AdminAuthorsPage() {
                     alignItems: "start",
                   }}
                 >
-                  {item.avatar_url ? (
+                  {resolveMediaUrl(item.avatar_url) ? (
                     <img
-                      src={item.avatar_url}
+                      src={resolveMediaUrl(item.avatar_url)}
                       alt={item.name}
                       width={72}
                       height={72}

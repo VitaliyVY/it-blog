@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { formatDate } from "../../lib/format-date";
+import { resolveMediaUrl } from "../../lib/media-url";
 
 type Author = {
   id: number;
@@ -65,9 +66,9 @@ export default async function AuthorPage({
           borderRadius: 16,
         }}
       >
-        {author.avatar_url ? (
+        {resolveMediaUrl(author.avatar_url) ? (
           <img
-            src={author.avatar_url}
+            src={resolveMediaUrl(author.avatar_url)}
             alt={author.name}
             width={120}
             height={120}

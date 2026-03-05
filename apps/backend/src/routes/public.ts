@@ -21,7 +21,7 @@ export default async function publicRoutes(app: FastifyInstance) {
       JOIN categories c ON c.id = a.category_id
       JOIN users u ON u.id = a.author_id
       WHERE a.status = 'published'
-      ORDER BY a.published_at DESC
+      ORDER BY a.published_at DESC, a.id DESC
       LIMIT $1 OFFSET $2
       `,
       [limit, offset]
@@ -120,7 +120,7 @@ export default async function publicRoutes(app: FastifyInstance) {
       FROM articles a
       JOIN users u ON u.id = a.author_id
       WHERE a.status='published' AND a.category_id=$1
-      ORDER BY a.published_at DESC
+      ORDER BY a.published_at DESC, a.id DESC
       `,
       [cat.id]
     );
@@ -153,7 +153,7 @@ export default async function publicRoutes(app: FastifyInstance) {
       JOIN categories c ON c.id = a.category_id
       JOIN users u ON u.id = a.author_id
       WHERE at.tag_id = $1 AND a.status='published'
-      ORDER BY a.published_at DESC
+      ORDER BY a.published_at DESC, a.id DESC
       `,
       [tag.id]
     );
@@ -188,7 +188,7 @@ export default async function publicRoutes(app: FastifyInstance) {
       FROM articles a
       JOIN categories c ON c.id = a.category_id
       WHERE a.status='published' AND a.author_id=$1
-      ORDER BY a.published_at DESC
+      ORDER BY a.published_at DESC, a.id DESC
       `,
       [author.id]
     );
@@ -215,7 +215,7 @@ export default async function publicRoutes(app: FastifyInstance) {
           a.excerpt ILIKE $1 OR
           a.content ILIKE $1
         )
-      ORDER BY a.published_at DESC
+      ORDER BY a.published_at DESC, a.id DESC
       LIMIT 50
       `,
       [`%${q}%`]

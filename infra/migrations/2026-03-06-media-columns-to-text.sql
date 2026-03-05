@@ -1,0 +1,5 @@
+ALTER TABLE articles
+  ALTER COLUMN cover_url TYPE TEXT;
+
+ALTER TABLE users
+  ALTER COLUMN avatar_url TYPE TEXT;
