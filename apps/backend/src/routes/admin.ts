@@ -26,12 +26,19 @@ function buildUpdate(
 export default async function adminRoutes(app: FastifyInstance) {
   // POST /api/auth/login
   app.post("/auth/login", async (req: any, reply) => {
-    const { email, password } = req.body || {};
+    const email =
+      typeof req.body?.email === "string" ? req.body.email.trim().toLowerCase() : "";
+    const password = typeof req.body?.password === "string" ? req.body.password : "";
+    const adminEmail = (process.env.ADMIN_EMAIL || "").trim().toLowerCase();
+    const adminPassword = process.env.ADMIN_PASSWORD || "";
 
-    if (
-      email === process.env.ADMIN_EMAIL &&
-      password === process.env.ADMIN_PASSWORD
-    ) {
+    if (!adminEmail || !adminPassword) {
+      return reply
+        .code(500)
+        .send({ error: "Admin credentials are not configured on server" });
+    }
+
+    if (email === adminEmail && password === adminPassword) {
       const token = app.jwt.sign({ email, role: "admin" }, { expiresIn: "7d" });
       return ok({ token }, {});
     }
